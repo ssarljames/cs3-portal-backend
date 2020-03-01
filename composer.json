@@ -61,9 +61,9 @@
         ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "echo "$OAUTH_PUBLIC_KEY" > storage/oauth-public.key",
-            "echo "$OAUTH_PRIVATE_KEY" > storage/oauth-private.key"
-        ]
+            "echo \"$OAUTH_PUBLIC_KEY\" > storage/oauth-public.key",
+            "echo \"$OAUTH_PRIVATE_KEY\" > storage/oauth-private.key"
+        ],
         "deploy": [
             "@php artisan migrate:fresh --force",
             "@php artisan passport:install --force",
