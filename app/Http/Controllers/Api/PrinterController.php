@@ -41,7 +41,7 @@ class PrinterController extends Controller
      */
     public function show(Printer $printer)
     {
-        return $printer->append('current_user');
+        return $printer->append('current_session');
     }
 
     /**
@@ -51,9 +51,33 @@ class PrinterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Printer $printer)
     {
-        //
+        if($request->set_session_user_id){
+            if($request->user()->id == $request->set_session_user_id && $printer->current_session == null){
+                $printer->usages()->create([
+                    'user_id' => $request->set_session_user_id,
+                    'start' => now()
+                ]);
+            }
+        }
+
+        elseif($request->unset_session_user_id){
+            if($request->user()->id == $request->unset_session_user_id){
+                $usage = $printer->usages()
+                            ->where('user_id', $request->unset_session_user_id)
+                            ->where('end', null)
+                            ->latest()
+                            ->first();
+
+                if($usage)
+                    $usage->update([
+                        'end' => now()
+                    ]);
+            }
+        }
+
+        return $this->show($printer);
     }
 
     /**

@@ -19,6 +19,12 @@ class CreatePrintTransactionItemsTable extends Migration
             $table->unsignedBigInteger('print_transaction_id');
             $table->foreign('print_transaction_id')->references('id')->on('print_transactions');
 
+            $table->tinyInteger('size');
+            $table->tinyInteger('quality');
+            $table->unsignedInteger('quantity');
+            $table->decimal('price', 5, 2);
+            $table->decimal('total');
+
             $table->timestamps();
         });
     }

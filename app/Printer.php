@@ -21,11 +21,25 @@ class Printer extends Model
         return $this->hasMany(PrinterUsageLog::class);
     }
 
-    public function getCurrentUserAttribute(){
-        $usage = $this->usages()->orderBy('created_at', 'desc')->first();
+    // public function getCurrentUserAttribute(){
+    //     $usage = $this->usages()->orderBy('created_at', 'desc')->first();
+
+    //     if($usage && $usage->end == null)
+    //         return $usage->user;
+
+    //     return null;
+    // }
+
+
+    public function getCurrentSessionAttribute(){
+        $usage = $this->usages()->latest()->first();
 
         if($usage && $usage->end == null)
-            return $usage->user;
+            return [
+                'user' => $usage->user,
+                'start_time' => $usage->created_at,
+                'sales' => $this->transactions()->createdSince($usage->created_at)->sum('sales')
+            ];
 
         return null;
     }

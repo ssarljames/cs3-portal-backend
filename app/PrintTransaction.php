@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\ModelEvents\PrintTransaction\PrintTransactionCreating;
 use Illuminate\Database\Eloquent\Model;
 
 class PrintTransaction extends Model
@@ -10,7 +11,15 @@ class PrintTransaction extends Model
         'printer_id',
         'user_id',
         'member_id',
-        'sales'
+        'sales',
+        'time'
+    ];
+
+    protected $dates = ['time'];
+
+
+    protected $dispatchesEvents = [
+        'creating' => PrintTransactionCreating::class,
     ];
 
     public function printer()
@@ -26,5 +35,27 @@ class PrintTransaction extends Model
     public function member()
     {
         return $this->belongsTo(Member::class, 'foreign_key', 'other_key');
+    }
+
+    public function print_transaction_items()
+    {
+        return $this->hasMany(PrintTransactionItem::class);
+    }
+
+    public function updateSales(){
+        $this->update([
+            'sales' => $this->print_transaction_items()->sum('total')
+        ]);
+    }
+
+    public function scopeTransactionBy($q, $user_id=null){
+        if($user_id)
+            return $q->where('user_id', $user_id);
+    }
+
+
+    public function scopeCreatedSince($q, $datetime=null){
+        if($datetime)
+            return $q->where('created_at', '>=', $datetime);
     }
 }

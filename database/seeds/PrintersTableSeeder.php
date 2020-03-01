@@ -13,7 +13,7 @@ class PrintersTableSeeder extends Seeder
     public function run()
     {
         DB::table('printers')->insert([
-            'description' => 'HP L330'
+            'description' => 'Epson L3110'
         ]);
     }
 }

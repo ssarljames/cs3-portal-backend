@@ -34,4 +34,9 @@ class User extends Authenticatable
     public static function query(){
         return parent::query()->where('id', '>', 1);
     }
+
+    public function print_transactions()
+    {
+        return $this->hasMany(PrintTransaction::class);
+    }
 }
