@@ -63,6 +63,8 @@
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "@php artisan migrate:fresh --force",
             "@php artisan db:seed --force",
+            "@php artisan passport:install --force",
+            "@php artisan passport:keys --force",
             "echo \"$OAUTH_PUBLIC_KEY\" > storage/oauth-public.key",
             "echo \"$OAUTH_PRIVATE_KEY\" > storage/oauth-private.key"
         ],
