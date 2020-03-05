@@ -23,10 +23,14 @@ class PrintTransactionController extends Controller
 
         $printer = Printer::findOrFail($request->printer_id);
 
-        $query = $printer->transactions()
-                    ->where('created_at', '>=', $printer->current_session ? $printer->current_session['start_time'] : now());
+        $query = $printer->transactions();
 
-        $query->transactionBy($printer->current_session['user']->id);
+        if($printer->current_session)
+            $query->where('created_at', '>=', $printer->current_session['start_time']);
+
+        if($printer->current_session)
+            $query->transactionBy($printer->current_session['user']->id);
+
         $query->latest();
 
         $query->with('member');
@@ -50,8 +54,8 @@ class PrintTransactionController extends Controller
             'printer_id'=> 'required|exists:printers,id',
             'member_id' => 'required',
             'time'      => "required:date_format:'M d, Y h:i A'",
-            'transaction_items.*.size' => 'required|numeric|min:1',
-            'transaction_items.*.quality' => 'required|numeric|min:1',
+            'transaction_items.*.paper_size_id' => 'required|exists:paper_sizes,id',
+            'transaction_items.*.print_quality_id' => 'required|exists:print_qualities,id',
             'transaction_items.*.quantity' => 'required|numeric|min:1',
             'transaction_items.*.price' => 'required|numeric|min:1',
         ];
@@ -70,7 +74,7 @@ class PrintTransactionController extends Controller
 
         $transaction->updateSales();
 
-        return $transaction;
+        return $transaction->load('member');
     }
 
     /**

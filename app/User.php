@@ -7,6 +7,8 @@ use App\Events\ModelEvents\User\UserUpdating;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
@@ -38,5 +40,16 @@ class User extends Authenticatable
     public function print_transactions()
     {
         return $this->hasMany(PrintTransaction::class);
+    }
+
+    public function checkPassword($password){
+        return Hash::check($password, $this->password);
+    }
+
+    public function validatePassword($password){
+        if($this->checkPassword($password) == false)
+            throw ValidationException::withMessages([
+                'password' => ['User password is incorrect.', $password],
+            ]);
     }
 }

@@ -9,8 +9,8 @@ class PrintTransactionItem extends Model
 {
     protected $fillable = [
         'print_transaction_id',
-        'size',
-        'quality',
+        'paper_size_id',
+        'print_quality_id',
         'quantity',
         'price',
         'total'

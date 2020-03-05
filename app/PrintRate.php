@@ -2,36 +2,36 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class PrintRate extends Model
 {
     protected $fillable = [
-        'size',
-        'quality',
+        'paper_size_id',
+        'print_quality_id',
         'rate'
     ];
 
-    const LETTER = 1;
-    const LONG = 2;
-    const A4 = 3;
 
-    const SIZES = [
-        self::LETTER => 'Letter',
-        self::LONG => 'Long',
-        self::A4 => 'A4'
-    ];
 
-    const DRAFT = 1;
-    const STANDARD = 2;
-    const HALF_PAGE_COLOR = 3;
-    const FULL_PAGE_COLOR = 4;
+    public static function scopeUpdatedRates($q){
+        // return DB::select('(select `paper_size_id`, `print_quality_id`, `rate`, max(created_at) as created_at from `print_rates` group by `paper_size_id`, `print_quality_id`)');
+        return $q->select('paper_size_id',
+                            'print_quality_id',
+                            'rate',
+                            DB::raw('max(created_at) as created_at'))
+                            ->groupBy('paper_size_id','print_quality_id');
+    }
 
-    const QUALITIES = [
-        self::DRAFT => 'Draft',
-        self::STANDARD => 'Standard',
-        self::HALF_PAGE_COLOR => 'Half Page Color',
-        self::FULL_PAGE_COLOR => 'Full Page Color',
-    ];
+    public function paper_size()
+    {
+        return $this->belongsTo(PaperSize::class);
+    }
 
+    public function print_quality()
+    {
+        return $this->belongsTo(PrintQuality::class);
+    }
 }

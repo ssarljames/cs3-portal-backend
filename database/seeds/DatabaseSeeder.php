@@ -14,5 +14,8 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         $this->call(PrintersTableSeeder::class);
         $this->call(MembersTableSeeder::class);
+        $this->call(PaperSizesTableSeeder::class);
+        $this->call(PrintQualitiesTableSeeder::class);
+        $this->call(PrintRatesTableSeeder::class);
     }
 }

@@ -55,6 +55,13 @@ class PrinterController extends Controller
     {
         if($request->set_session_user_id){
             if($request->user()->id == $request->set_session_user_id && $printer->current_session == null){
+
+                $request->validate([
+                    'user_password' => 'required'
+                ]);
+
+                $request->user()->validatePassword($request->user_password);
+
                 $printer->usages()->create([
                     'user_id' => $request->set_session_user_id,
                     'start' => now()
@@ -64,11 +71,18 @@ class PrinterController extends Controller
 
         elseif($request->unset_session_user_id){
             if($request->user()->id == $request->unset_session_user_id){
+
+                $request->validate([
+                    'user_password' => 'required'
+                ]);
+
+                $request->user()->validatePassword($request->user_password);
+
                 $usage = $printer->usages()
-                            ->where('user_id', $request->unset_session_user_id)
-                            ->where('end', null)
-                            ->latest()
-                            ->first();
+                        ->where('user_id', $request->unset_session_user_id)
+                        ->where('end', null)
+                        ->latest()
+                        ->first();
 
                 if($usage)
                     $usage->update([

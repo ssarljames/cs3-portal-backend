@@ -26,6 +26,8 @@ Route::namespace('Api')->group(function () {
         Route::resource('users', 'UserController')->except('create');
         Route::resource('printers', 'PrinterController')->except('create');
         Route::resource('print-transactions', 'PrintTransactionController')->except('create');
+        Route::resource('paper-sizes', 'PaperSizeController')->except('create');
+        Route::resource('print-qualities', 'PrintQualityController')->except('create');
     });
 
 

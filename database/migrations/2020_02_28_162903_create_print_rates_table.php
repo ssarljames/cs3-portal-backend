@@ -16,8 +16,11 @@ class CreatePrintRatesTable extends Migration
         Schema::create('print_rates', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->tinyInteger('size');
-            $table->tinyInteger('quality');
+            $table->unsignedTinyInteger('paper_size_id');
+            $table->foreign('paper_size_id')->references('id')->on('paper_sizes');
+
+            $table->unsignedTinyInteger('print_quality_id');
+            $table->foreign('print_quality_id')->references('id')->on('print_qualities');
 
             $table->decimal('rate', 4, 2);
 
