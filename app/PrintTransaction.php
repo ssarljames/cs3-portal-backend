@@ -37,14 +37,14 @@ class PrintTransaction extends Model
         return $this->belongsTo(Member::class);
     }
 
-    public function print_transaction_items()
+    public function transaction_items()
     {
         return $this->hasMany(PrintTransactionItem::class);
     }
 
     public function updateSales(){
         $this->update([
-            'sales' => $this->print_transaction_items()->sum('total')
+            'sales' => $this->transaction_items()->sum('total')
         ]);
     }
 

@@ -54,6 +54,7 @@ class PrintTransactionController extends Controller
             'printer_id'=> 'required|exists:printers,id',
             'member_id' => 'required',
             'time'      => "required:date_format:'M d, Y h:i A'",
+            'transaction_items' => 'required|array',
             'transaction_items.*.paper_size_id' => 'required|exists:paper_sizes,id',
             'transaction_items.*.print_quality_id' => 'required|exists:print_qualities,id',
             'transaction_items.*.quantity' => 'required|numeric|min:1',
@@ -70,7 +71,7 @@ class PrintTransactionController extends Controller
         ]);
 
         foreach ($request->transaction_items as $t)
-            $transaction->print_transaction_items()->create($t);
+            $transaction->transaction_items()->create($t);
 
         $transaction->updateSales();
 
@@ -83,9 +84,15 @@ class PrintTransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        //
+        $transaction = PrintTransaction::findOrFail($id);
+        $transaction->load('transaction_items.paper_size')
+                    ->load('transaction_items.print_quality')
+                    ->load('member')
+                    ->load('user');
+
+        return $transaction;
     }
 
     /**

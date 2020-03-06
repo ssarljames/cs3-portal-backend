@@ -15,8 +15,8 @@ class MembersTableSeeder extends Seeder
         DB::table('members')->insert([
             'id' => 1,
             'id_number' => '00-0-0000',
-            'firstname' => 'Anonymous',
-            'lastname' => 'Member'
+            'firstname' => 'Juan',
+            'lastname' => 'Dela Cruz'
         ]);
     }
 }

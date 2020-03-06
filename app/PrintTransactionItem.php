@@ -16,8 +16,21 @@ class PrintTransactionItem extends Model
         'total'
     ];
 
+    protected $with = [ 'paper_size', 'print_quality' ];
 
     protected $dispatchesEvents = [
         'creating' => PrintTransactionItemCreating::class,
     ];
+
+
+    public function paper_size()
+    {
+        return $this->belongsTo(PaperSize::class);
+    }
+
+
+    public function print_quality()
+    {
+        return $this->belongsTo(PrintQuality::class);
+    }
 }

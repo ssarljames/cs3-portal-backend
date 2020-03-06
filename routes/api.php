@@ -28,6 +28,7 @@ Route::namespace('Api')->group(function () {
         Route::resource('print-transactions', 'PrintTransactionController')->except('create');
         Route::resource('paper-sizes', 'PaperSizeController')->except('create');
         Route::resource('print-qualities', 'PrintQualityController')->except('create');
+        Route::post('logout', 'AuthController@logout')->name('logout.api');
     });
 
 
