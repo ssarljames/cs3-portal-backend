@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\PaperSize;
-use App\PrintQuality;
 use App\PrintRate;
 use Illuminate\Http\Request;
 
-class PrintQualityController extends Controller
+class PrintRateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,11 +15,15 @@ class PrintQualityController extends Controller
      */
     public function index(Request $request)
     {
-        $query = PrintQuality::query();
+        $query = PrintRate::query();
 
-        $print_qualities = $query->paginate(20);
+        $query->updatedRates();
 
-        return $print_qualities;
+        $query->with('paper_size', 'print_quality');
+        // $query->orderBy('created_at', 'desc');
+        $print_rates = $query->paginate(100);
+
+        return $print_rates;
     }
 
     /**
@@ -32,24 +34,17 @@ class PrintQualityController extends Controller
      */
     public function store(Request $request)
     {
-
         $rule = [
-            'description' => 'required|max:50'
+            'paper_size_id' => 'required',
+            'print_quality_id' => 'required',
+            'rate'              => 'required|numeric'
         ];
 
         $request->validate($rule);
 
-        $print_quality = PrintQuality::create($request->all());
+        $pr = PrintRate::create($request->all());
 
-        foreach (PaperSize::select('id')->get() as $ps) {
-            PrintRate::create([
-                'print_quality_id' => $print_quality->id,
-                'paper_size_id'     => $ps->id,
-                'rate'              => 0
-            ]);
-        }
-
-        return $print_quality;
+        return $pr;
     }
 
     /**

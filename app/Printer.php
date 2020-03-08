@@ -37,7 +37,7 @@ class Printer extends Model
         if($usage && $usage->end == null)
             return [
                 'user' => $usage->user,
-                'start_time' => $usage->created_at,
+                'start_time' => $usage->start,
                 'sales' => $this->transactions()->createdSince($usage->created_at)->sum('sales'),
                 'print_rates' => PrintRate::updatedRates()->with('paper_size', 'print_quality')->get(),
                 'paper_sizes' => PaperSize::select('id', 'description', 'dimension')->get(),

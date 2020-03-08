@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\PaperSize;
+use App\PrintQuality;
+use App\PrintRate;
 use Illuminate\Http\Request;
 
 class PaperSizeController extends Controller
@@ -12,9 +15,13 @@ class PaperSizeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = PaperSize::query();
+
+        $paper_sizes = $query->paginate(100);
+
+        return $paper_sizes;
     }
 
     /**
@@ -25,7 +32,24 @@ class PaperSizeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rule = [
+            'description' => 'required|max:50',
+            'dimension' => 'required|max:20',
+        ];
+
+        $request->validate($rule);
+
+        $paper_size = PaperSize::create($request->all());
+
+        foreach (PrintQuality::select('id')->get() as $pq) {
+            PrintRate::create([
+                'print_quality_id'  => $pq->id,
+                'paper_size_id'     => $paper_size->id,
+                'rate'              => 0
+            ]);
+        }
+
+        return $paper_size;
     }
 
     /**

@@ -27,6 +27,10 @@ class User extends Authenticatable
 
     protected $dates = ['created_at',  'updated_at'];
 
+    protected $hidden = [ 'password' ];
+
+    protected $appends = [ 'is_administrator' ];
+
 
     protected $dispatchesEvents = [
         'creating' => UserCreating::class,
@@ -51,5 +55,9 @@ class User extends Authenticatable
             throw ValidationException::withMessages([
                 'password' => ['User password is incorrect.', $password],
             ]);
+    }
+
+    public function getIsAdministratorAttribute(){
+        return $this->id == 1;
     }
 }

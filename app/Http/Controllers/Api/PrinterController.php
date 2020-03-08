@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Printer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PrinterController extends Controller
@@ -86,7 +87,8 @@ class PrinterController extends Controller
 
                 if($usage)
                     $usage->update([
-                        'end' => now()
+                        'end' => now(),
+                        'total_time' => Carbon::parse($usage->start)->diffInRealMinutes()
                     ]);
             }
         }

@@ -14,15 +14,30 @@ class PrintRate extends Model
         'rate'
     ];
 
-
-
-    public static function scopeUpdatedRates($q){
-        // return DB::select('(select `paper_size_id`, `print_quality_id`, `rate`, max(created_at) as created_at from `print_rates` group by `paper_size_id`, `print_quality_id`)');
-        return $q->select('paper_size_id',
-                            'print_quality_id',
-                            'rate',
-                            DB::raw('max(created_at) as created_at'))
+    public function scopeUpdatedRates(Builder $q){
+        if(env('DB_CONNECTION') == 'mysql')
+            return $q->select('paper_size_id', 'print_quality_id','rate', DB::raw('max(created_at) as created_at'))
                             ->groupBy('paper_size_id','print_quality_id');
+
+        if(env('DB_CONNECTION') == 'pgsql')
+            return $q->fromRaw('(select (row_number() over (partition by
+                                                                paper_size_id, print_quality_id
+                                                                order by created_at desc)
+                                    ) as rn,
+                                    paper_size_id,
+                                    print_quality_id,
+                                    rate,
+                                    created_at
+                                    from print_rates) as print_rates')
+
+                                    ->where('rn', 1)
+
+                                    ->select(
+                                        'paper_size_id',
+                                        'print_quality_id',
+                                        'rate',
+                                        'created_at'
+                                    );
     }
 
     public function paper_size()
