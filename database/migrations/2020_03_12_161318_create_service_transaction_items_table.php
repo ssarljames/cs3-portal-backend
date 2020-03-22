@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrintTransactionItemsTable extends Migration
+class CreateServiceTransactionItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreatePrintTransactionItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('print_transaction_items', function (Blueprint $table) {
+        Schema::create('service_transaction_items', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->unsignedBigInteger('print_transaction_id');
-            $table->foreign('print_transaction_id')->references('id')->on('print_transactions');
+
+            $table->unsignedBigInteger('service_transaction_id');
+            $table->foreign('service_transaction_id')->references('id')->on('service_transactions');
+
+            $table->unsignedInteger('type');
 
             $table->unsignedTinyInteger('paper_size_id');
             $table->foreign('paper_size_id')->references('id')->on('paper_sizes');
@@ -27,6 +30,7 @@ class CreatePrintTransactionItemsTable extends Migration
 
             $table->unsignedInteger('quantity');
             $table->decimal('price', 5, 2);
+
             $table->decimal('total');
 
             $table->timestamps();
@@ -40,6 +44,6 @@ class CreatePrintTransactionItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('print_transaction_items');
+        Schema::dropIfExists('service_transaction_items');
     }
 }

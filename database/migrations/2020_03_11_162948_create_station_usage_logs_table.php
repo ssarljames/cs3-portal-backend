@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrintTransactionsTable extends Migration
+class CreateStationUsageLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,22 +13,20 @@ class CreatePrintTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('print_transactions', function (Blueprint $table) {
+        Schema::create('station_usage_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->unsignedBigInteger('printer_id');
-            $table->foreign('printer_id')->references('id')->on('printers');
+            $table->unsignedBigInteger('station_id');
+            $table->foreign('station_id')->references('id')->on('stations');
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->unsignedBigInteger('member_id')->nullable();
-            $table->foreign('member_id')->references('id')->on('members');
+            $table->dateTime('time_in');
+            $table->dateTime('time_out')->nullable();
+            $table->boolean('force_logged_out')->default(false);
 
-            $table->decimal('sales')->default(0);
-
-            $table->dateTime('time');
-
+            $table->unsignedSmallInteger('total_time')->default(0);
 
             $table->timestamps();
         });
@@ -41,6 +39,6 @@ class CreatePrintTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('print_transactions');
+        Schema::dropIfExists('station_usage_logs');
     }
 }
