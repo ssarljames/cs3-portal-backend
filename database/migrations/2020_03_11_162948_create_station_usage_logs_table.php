@@ -28,6 +28,8 @@ class CreateStationUsageLogsTable extends Migration
 
             $table->unsignedSmallInteger('total_time')->default(0);
 
+            $table->unsignedDecimal('total_sales')->default(0);
+
             $table->timestamps();
         });
     }

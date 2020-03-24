@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\PaperSize;
-use App\PrintQuality;
-use App\PrintRate;
+use App\Models\PaperSize;
+use App\Models\PrintQuality;
+use App\Models\ServiceRate;
+use App\Models\ServiceTransaction;
 use Illuminate\Http\Request;
 
 class PrintQualityController extends Controller
@@ -42,7 +43,8 @@ class PrintQualityController extends Controller
         $print_quality = PrintQuality::create($request->all());
 
         foreach (PaperSize::select('id')->get() as $ps) {
-            PrintRate::create([
+            ServiceRate::create([
+                'type'              => ServiceTransaction::PRINT,
                 'print_quality_id' => $print_quality->id,
                 'paper_size_id'     => $ps->id,
                 'rate'              => 0

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Station;
+use App\Models\Station;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class StationController extends Controller
 {
@@ -39,9 +40,9 @@ class StationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Station $station)
     {
-        //
+        return $station;
     }
 
     /**
@@ -51,9 +52,44 @@ class StationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Station $station)
     {
-        //
+        if($request->has('use') && $request->has('password')){
+
+            if(Hash::check($request->password, $request->user()->password) == false){
+                return response()->json([
+                    'message' => 'Password is incorrect'
+                ], 401);
+            }
+
+            if($station->current_session == null){
+                $station->usage_logs()->create([
+                    'user_id' => $request->user()->id,
+                    'time_in' => now()
+                ]);
+            }
+
+            return $station;
+        }
+
+
+        if($request->has('leave') && $request->has('password')){
+
+
+            if(Hash::check($request->password, $request->user()->password) == false){
+                return response()->json([
+                    'message' => 'Password is incorrect'
+                ], 401);
+            }
+
+            if($station->current_session && $station->current_session->user_id == $request->user()->id){
+                $station->current_session->update([
+                    'time_out' => now()
+                ]);
+            }
+
+            return $station;
+        }
     }
 
     /**

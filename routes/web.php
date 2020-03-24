@@ -11,6 +11,9 @@
 |
 */
 
+use App\Models\ServiceRate;
 use Illuminate\Support\Facades\Route;
 
-Route::get('printer-usage-logs', 'PrinterUsageLogController@index');
+Route::get('', function(){
+    return ServiceRate::updatedRates()->toSql();
+});

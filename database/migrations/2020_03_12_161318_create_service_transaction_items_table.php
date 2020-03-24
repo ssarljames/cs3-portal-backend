@@ -22,16 +22,16 @@ class CreateServiceTransactionItemsTable extends Migration
 
             $table->unsignedInteger('type');
 
-            $table->unsignedTinyInteger('paper_size_id');
+            $table->unsignedTinyInteger('paper_size_id')->nullable();
             $table->foreign('paper_size_id')->references('id')->on('paper_sizes');
 
-            $table->unsignedTinyInteger('print_quality_id');
+            $table->unsignedTinyInteger('print_quality_id')->nullable();
             $table->foreign('print_quality_id')->references('id')->on('print_qualities');
 
             $table->unsignedInteger('quantity');
-            $table->decimal('price', 5, 2);
+            $table->unsignedDecimal('price', 5, 2);
 
-            $table->decimal('total');
+            $table->unsignedDecimal('total');
 
             $table->timestamps();
         });

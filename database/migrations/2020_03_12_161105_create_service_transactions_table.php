@@ -26,7 +26,7 @@ class CreateServiceTransactionsTable extends Migration
             $table->unsignedBigInteger('member_id')->nullable();
             $table->foreign('member_id')->references('id')->on('members');
 
-            $table->decimal('sales')->default(0);
+            $table->unsignedDecimal('sales')->default(0);
             $table->dateTime('time');
 
             $table->timestamps();

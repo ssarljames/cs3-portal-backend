@@ -1,38 +1,30 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\User;
+use App\Http\Controllers\Controller;
+use App\Models\ServiceRate;
+use App\Models\ServiceTransaction;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class ServiceRateController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = ServiceRate::query();
 
-        $query = User::query();
+        $query->updatedRates();
 
+        $query->with('paper_size', 'print_quality');
+        // $query->orderBy('created_at', 'desc');
+        $print_rates = $query->paginate(100);
 
-
-        $users = $query->paginate();
-
-
-        return view('users.index', compact('users'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('users.create');
+        return $print_rates;
     }
 
     /**
@@ -43,7 +35,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rule = [
+            'type' => 'required',
+            'paper_size_id' => $request->type == ServiceTransaction::PRINT ? 'required' : 'nullable',
+            'print_quality_id' => $request->type == ServiceTransaction::PRINT ? 'required' : 'nullable',
+            'rate'              => 'required|numeric|max:99'
+        ];
+
+        $request->validate($rule);
+
+        $pr = ServiceRate::create($request->all());
+
+        return $pr;
     }
 
     /**
@@ -53,17 +56,6 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
         //
     }

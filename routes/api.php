@@ -27,7 +27,11 @@ Route::namespace('Api')->group(function () {
         Route::resource('stations', 'StationController')->except('create');
         Route::resource('paper-sizes', 'PaperSizeController')->except('create');
         Route::resource('print-qualities', 'PrintQualityController')->except('create');
-        Route::resource('print-rates', 'PrintRateController')->except('create');
+        Route::resource('service-rates', 'ServiceRateController')->except('create');
+
+        Route::resource('service-transactions', 'ServiceTransactionController')->except('create');
+
+        Route::resource('station-usage-logs', 'StationUsageLogController')->except('create');
 
         // Route::post('logout', 'AuthController@logout');
     });

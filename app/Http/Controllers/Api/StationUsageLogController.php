@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\PrintRate;
+use App\Models\StationUsageLog;
 use Illuminate\Http\Request;
 
-class PrintRateController extends Controller
+class StationUsageLogController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,15 +15,15 @@ class PrintRateController extends Controller
      */
     public function index(Request $request)
     {
-        $query = PrintRate::query();
+        $query = StationUsageLog::query();
 
-        $query->updatedRates();
+        $query->with(['user', 'station']);
 
-        $query->with('paper_size', 'print_quality');
-        // $query->orderBy('created_at', 'desc');
-        $print_rates = $query->paginate(100);
+        if($request->has('sortBy'))
+            $query->orderBy($request->sortBy, $request->has('sortOrder') ?  $request->sortOrder : 'asc' );
 
-        return $print_rates;
+
+        return $query->paginate($request->page_size ? $request->page_size : $this->defaultPageSize);
     }
 
     /**
@@ -34,17 +34,7 @@ class PrintRateController extends Controller
      */
     public function store(Request $request)
     {
-        $rule = [
-            'paper_size_id' => 'required',
-            'print_quality_id' => 'required',
-            'rate'              => 'required|numeric'
-        ];
-
-        $request->validate($rule);
-
-        $pr = PrintRate::create($request->all());
-
-        return $pr;
+        //
     }
 
     /**

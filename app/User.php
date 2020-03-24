@@ -29,7 +29,8 @@ class User extends Authenticatable
 
     protected $hidden = [ 'password' ];
 
-    protected $appends = [ 'is_administrator' ];
+    protected $appends = [ 'is_administrator', 'fullname' ];
+
 
 
     protected $dispatchesEvents = [
@@ -39,11 +40,6 @@ class User extends Authenticatable
 
     public static function query(){
         return parent::query()->where('id', '>', 1);
-    }
-
-    public function print_transactions()
-    {
-        return $this->hasMany(PrintTransaction::class);
     }
 
     public function checkPassword($password){
@@ -59,5 +55,9 @@ class User extends Authenticatable
 
     public function getIsAdministratorAttribute(){
         return $this->id == 1;
+    }
+
+    public function getFullnameAttribute(){
+        return ucwords(strtolower($this->lastname . ', ' . $this->firstname));
     }
 }
