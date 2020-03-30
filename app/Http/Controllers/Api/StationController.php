@@ -18,7 +18,14 @@ class StationController extends Controller
     {
         $query = Station::query();
 
-        $stations = $query->paginate();
+        $stations = $query->paginate(-1);
+
+        foreach ($stations as $station) {
+            if($station->current_session != null)
+                $station->current_session->validate();
+
+        }
+
 
         return $stations;
     }
@@ -65,7 +72,7 @@ class StationController extends Controller
             if($station->current_session == null){
                 $station->usage_logs()->create([
                     'user_id' => $request->user()->id,
-                    'time_in' => now()
+                    'time_in' => now()->startOfMinute()
                 ]);
             }
 

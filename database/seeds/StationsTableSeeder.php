@@ -13,10 +13,10 @@ class StationsTableSeeder extends Seeder
     public function run()
     {
         DB::table('stations')->insert([
-           'description' => 'Main'
+           'description' => 'Station 1'
         ]);
         DB::table('stations')->insert([
-           'description' => 'Assistance'
+           'description' => 'Station 2'
         ]);
     }
 }

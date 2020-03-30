@@ -11,9 +11,22 @@
 |
 */
 
-use App\Models\ServiceRate;
+// use App\Models\ServiceRate;
+use App\Models\StationUsageLog;
+use Carbon\Carbon;
+
+use App\Models\AccessToken;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', function(){
-    return ServiceRate::updatedRates()->toSql();
+
+    $max = Carbon::parse(date('Y-m-d') . ' ' . StationUsageLog::MAX_TIME_OUT);
+
+
+    return $max->lte('2020-03-30 20:26:00') ? '1' : '0';
 });
+
+
+Route::get('login', function(){
+    return 'Test login';
+})->name('login');

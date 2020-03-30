@@ -4,17 +4,21 @@ namespace App\Models;
 
 use App\Events\ModelEvents\StationUsageLog\StationUsageLogUpdating;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class StationUsageLog extends Model
 {
+
+    const MAX_TIME_OUT = '19:00:00';
+
     protected $fillable = [
         'station_id',
         'user_id',
         'time_in',
         'time_out',
-        'force_logged_out',
+        'logged_out_by_system',
         'total_time',
 
 
@@ -32,7 +36,7 @@ class StationUsageLog extends Model
         $hours = (int)($this->total_time / 60);
         $mins = ($this->total_time % 60);
 
-        return ($hours > 0 ? "{$hours} hr" : '') . ($mins > 0 && $hours > 0 ? ' & ' : '') . "{$mins} min" ;
+        return ($hours > 0 ? "{$hours} hr" : '') . ($mins > 0 && $hours > 0 ? ' & ' : '') . ($mins > 0 ? "{$mins} min" : '');
 
     }
 
@@ -56,5 +60,25 @@ class StationUsageLog extends Model
     public function station()
     {
         return $this->belongsTo(Station::class);
+    }
+
+    public function validate(){
+        $max = Carbon::parse($this->time_in->format('Y-m-d') . ' ' . StationUsageLog::MAX_TIME_OUT);
+
+        if($this->time_out == null && now()->gte($max)){
+
+            if($this->time_in->gte($max))
+                $this->update([
+                    'logged_out_by_system' => true,
+                    'time_out' => $this->time_in->endOfDay()
+                ]);
+
+            else if($this->time_in->lt($max))
+                $this->update([
+                    'logged_out_by_system' => true,
+                    'time_out' => $max
+                ]);
+
+        }
     }
 }

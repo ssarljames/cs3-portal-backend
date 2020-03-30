@@ -24,7 +24,7 @@ class CreateStationUsageLogsTable extends Migration
 
             $table->dateTime('time_in');
             $table->dateTime('time_out')->nullable();
-            $table->boolean('force_logged_out')->default(false);
+            $table->boolean('logged_out_by_system')->default(false);
 
             $table->unsignedSmallInteger('total_time')->default(0);
 

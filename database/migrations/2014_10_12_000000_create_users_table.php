@@ -23,6 +23,9 @@ class CreateUsersTable extends Migration
 
             $table->boolean('reset_password')->default(false);
 
+            $table->dateTime('deactivated_at')->nullable();
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -15,10 +15,10 @@ class AuthController extends Controller
 
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
-                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-                $response = ['token' => $token];
-                $user->token = $token;
-                return response($user, 200);
+                $token = $user->createToken('Laravel Password Grant Client');
+                // $response = ['token' => $token];
+                // $user->token = $token;
+                return response($token, 200);
             } else {
                 $response = "Invalid Credentials";
                 return response($response, 422);

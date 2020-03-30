@@ -24,11 +24,12 @@ class StationUsageLogUpdating
      */
     public function __construct(StationUsageLog $log)
     {
+
         if($log->time_out){
             $log->total_time = $log->time_out->diffInMinutes($log->time_in);
 
-            if($log->total_time < 10)
-                $log->total_time = 10;
+            // if($log->total_time < 10)
+            //     $log->total_time = 10;
 
             $log->total_sales = ServiceTransaction::query()
                                     ->stationId($log->station_id)

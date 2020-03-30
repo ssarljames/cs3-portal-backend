@@ -29,6 +29,8 @@ class CreateServiceTransactionsTable extends Migration
             $table->unsignedDecimal('sales')->default(0);
             $table->dateTime('time');
 
+            $table->text('remarks')->nullable();
+
             $table->timestamps();
         });
     }

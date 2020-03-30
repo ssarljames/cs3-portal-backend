@@ -13,7 +13,9 @@ class ServiceTransaction extends Model
         'user_id',
         'member_id',
         'sales',
-        'time'
+        'time',
+
+        'remarks'
     ];
 
     const PRINT = 1;

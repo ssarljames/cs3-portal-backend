@@ -23,6 +23,7 @@ class UserCreating
     public function __construct(User $user)
     {
         $user->password = bcrypt($user->password);
+        $user->reset_password = true;
     }
 
     /**

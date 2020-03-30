@@ -4,7 +4,9 @@ namespace App;
 
 use App\Events\ModelEvents\User\UserCreating;
 use App\Events\ModelEvents\User\UserUpdating;
+use App\Models\StationUsageLog;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +15,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens;
+    use Notifiable, HasApiTokens, SoftDeletes;
 
     protected $fillable = [
         'username',
@@ -22,14 +24,16 @@ class User extends Authenticatable
         'firstname',
         'lastname',
 
-        'reset_password'
+        'reset_password',
+
+        'deactivated_at'
     ];
 
     protected $dates = ['created_at',  'updated_at'];
 
     protected $hidden = [ 'password' ];
 
-    protected $appends = [ 'is_administrator', 'fullname' ];
+    protected $appends = [ 'is_administrator', 'fullname', 'role' ];
 
 
 
@@ -59,5 +63,14 @@ class User extends Authenticatable
 
     public function getFullnameAttribute(){
         return ucwords(strtolower($this->lastname . ', ' . $this->firstname));
+    }
+
+    public function station_usage_logs()
+    {
+        return $this->hasMany(StationUsageLog::class);
+    }
+
+    public function getRoleAttribute(){
+        return $this->id == 1 ? 'administrator' : 'encoder';
     }
 }
