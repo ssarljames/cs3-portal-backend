@@ -61,8 +61,7 @@
         ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "@php artisan migrate:fresh --force",
-            "@php artisan db:seed --force",
+            "@php artisan migrate:fresh",
             "@php artisan passport:install --force",
             "@php artisan passport:keys --force",
             "echo \"$OAUTH_PUBLIC_KEY\" > storage/oauth-public.key",
