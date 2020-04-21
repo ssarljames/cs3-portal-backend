@@ -65,7 +65,7 @@ class StationUsageLog extends Model
     public function validate(){
         $max = Carbon::parse($this->time_in->format('Y-m-d') . ' ' . StationUsageLog::MAX_TIME_OUT);
 
-        if($this->time_out == null && now()->gte($max)){
+        if($this->time_out == null && now()->gte($max) && false){
 
             if($this->time_in->gte($max))
                 $this->update([

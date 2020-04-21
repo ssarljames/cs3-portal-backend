@@ -23,7 +23,7 @@ class Station extends Model
     }
 
     public function getAllowedToUseAttribute(){
-        return now()->lte(date('Y-m-d ') . StationUsageLog::MAX_TIME_OUT);
+        return true || now()->lte(date('Y-m-d ') . StationUsageLog::MAX_TIME_OUT);
 
     }
 

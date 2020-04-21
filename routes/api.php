@@ -33,8 +33,13 @@ Route::namespace('Api')->group(function () {
 
         Route::resource('station-usage-logs', 'StationUsageLogController')->except('create');
 
+        Route::resource('posts', 'PostController')->except(['index', 'show','create']);
+
         // Route::post('logout', 'AuthController@logout');
     });
+
+
+    Route::resource('posts', 'PostController')->only(['index', 'show']);
 
 
 });
