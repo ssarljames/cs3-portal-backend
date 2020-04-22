@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Post;
+use App\Http\Resources\EventResource;
+use App\Models\Event;
+use Exception;
 use Illuminate\Http\Request;
-
-use App\Http\Resources\PostResource;
 use Illuminate\Support\Facades\DB;
 
-class PostController extends Controller
+class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +18,13 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Post::query();
+        $query = Event::query();
 
-        $posts = $query->paginate();
+        $query->orderBy('start_date', 'desc');
 
-        return PostResource::collection($posts);
+        $events = $query->paginate();
+
+        return EventResource::collection($events);
     }
 
     /**
@@ -34,15 +36,18 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $rule = [
-            'title' => 'required|max:200',
-            'content' => 'required'
+            'name' => 'required|max:100',
+            'description' => 'required',
+            'type' => 'required',
+            'start_date' => 'required|date_format:Y-m-d',
+            'end_date'  => 'nullable|date_format:Y-m-d|after_or_equal:start_date'
         ];
 
         $data = $request->validate($rule);
 
-        $post = $request->user()->posts()->create($data);
+        $event = $request->user()->events()->create($data);
 
-        return new PostResource($post);
+        return new EventResource($event);
     }
 
     /**
@@ -53,7 +58,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return new PostResource(Post::find($id));
+        return new EventResource(Event::find($id));
     }
 
     /**
@@ -66,17 +71,19 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $rule = [
-            'title' => 'required|max:200',
-            'content' => 'required'
+            'name' => 'required|max:100',
+            'description' => 'required',
+            'type' => 'required',
+            'start_date' => 'required|date_format:Y-m-d',
+            'end_date'  => 'nullable|date_format:Y-m-d|after_or_equal:start_date'
         ];
 
         $data = $request->validate($rule);
 
-        $post = Post::find($id);
+        $event = Event::find($id);
+        $event->update($data);
 
-        $post->update($data);
-
-        return new PostResource($post);
+        return new EventResource($event);
     }
 
     /**
@@ -87,11 +94,18 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        DB::transaction(function () use ($id) {
-          
-            Post::destroy($id);
-            
-        });
+        DB::beginTransaction();
+
+        try{
+            Event::destroy($id);
+            DB::commit();
+        }catch(Exception $e){
+            DB::rollback();
+
+            return response()->json([
+                'error' => $e
+            ], 500);
+        }
 
         return [
             'message' => 'ok'

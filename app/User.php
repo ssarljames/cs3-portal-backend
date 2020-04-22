@@ -4,6 +4,7 @@ namespace App;
 
 use App\Events\ModelEvents\User\UserCreating;
 use App\Events\ModelEvents\User\UserUpdating;
+use App\Models\Event;
 use App\Models\Post;
 use App\Models\StationUsageLog;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -78,5 +79,10 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
     }
 }
