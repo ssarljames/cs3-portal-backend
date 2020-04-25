@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServiceTransactionsTable extends Migration
+class CreateEventTimeLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,24 @@ class CreateServiceTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('service_transactions', function (Blueprint $table) {
+        Schema::create('event_time_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
 
+            $table->unsignedBigInteger('event_id');
+            $table->foreign('event_id')->references('id')->on('events');
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->unsignedBigInteger('station_id');
-            $table->foreign('station_id')->references('id')->on('stations');
+            
+            $table->unsignedBigInteger('entry_by_user_id');
+            $table->foreign('entry_by_user_id')->references('id')->on('users');
 
-            $table->unsignedBigInteger('customer_user_id')->nullable();
-            $table->foreign('customer_user_id')->references('id')->on('users');
-
-            $table->unsignedDecimal('sales')->default(0);
             $table->dateTime('time');
+            $table->unsignedTinyInteger('type');
 
-            $table->text('remarks')->nullable();
+            $table->unsignedTinyInteger('monitoring_group');
+
 
             $table->timestamps();
         });
@@ -42,6 +43,6 @@ class CreateServiceTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service_transactions');
+        Schema::dropIfExists('event_time_logs');
     }
 }

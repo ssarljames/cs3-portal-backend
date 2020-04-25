@@ -23,8 +23,18 @@ class EventResource extends JsonResource
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'created_at' => $this->created_at,
+            'include_weekends' => $this->include_weekends,
+            'user' => $this->user,
 
-            'user' => $this->user
+            'time_logs' =>  $request->include_logs 
+                            ? EventTimeLogResource::collection(
+                                    $this->time_logs()
+                                            ->dated($request->all_logs
+                                                        ? date("Y-m-d")
+                                                        : null)->get()
+                                )
+                            : []
+
         ];
     }
 }

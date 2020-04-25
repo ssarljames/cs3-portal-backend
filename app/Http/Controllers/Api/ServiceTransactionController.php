@@ -22,7 +22,7 @@ class ServiceTransactionController extends Controller
         $query->stationId($request->station_id)
                 ->fromTime($request->time);
 
-        $query->with('member')
+        $query->with('customer')
             ->orderBy('time', 'desc');
 
         return $query->paginate($request->page_size ? $request->page_size : $this->defaultPageSize);
@@ -38,7 +38,7 @@ class ServiceTransactionController extends Controller
     {
         $rules = [
             'station_id' => 'required',
-            'member_id' => 'required',
+            'customer_user_id' => 'required',
             'transaction_items.*.type' => 'required|in:1,2',
             'transaction_items.*.paper_size_id' => $request->type == ServiceTransaction::PRINT ? 'required':'',
             'transaction_items.*.print_quality_id' => $request->type == ServiceTransaction::PRINT ? 'required':'',
@@ -60,7 +60,7 @@ class ServiceTransactionController extends Controller
             $transaction = ServiceTransaction::create([
                 'station_id' => $request->station_id,
                 'user_id' => $request->user()->id,
-                'member_id' => $request->member_id,
+                'customer_user_id' => $request->customer_user_id,
                 'sales' => $sales,
                 'time' => now()
             ]);
@@ -81,7 +81,7 @@ class ServiceTransactionController extends Controller
 
 
 
-            return $transaction->load('member');
+            return $transaction->load('customer');
 
         }catch(Exception $e){
             DB::rollBack();

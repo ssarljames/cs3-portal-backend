@@ -13,7 +13,8 @@ class Event extends Model
         'type',
         'user_id',
         'start_date',
-        'end_date'
+        'end_date',
+        'include_weekends'
     ];
 
     protected $dates = [
@@ -24,5 +25,10 @@ class Event extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function time_logs()
+    {
+        return $this->hasMany(EventTimeLog::class);
     }
 }

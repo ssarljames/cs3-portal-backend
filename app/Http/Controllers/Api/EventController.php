@@ -40,10 +40,13 @@ class EventController extends Controller
             'description' => 'required',
             'type' => 'required',
             'start_date' => 'required|date_format:Y-m-d',
-            'end_date'  => 'nullable|date_format:Y-m-d|after_or_equal:start_date'
+            'end_date'  => 'nullable|date_format:Y-m-d|after_or_equal:start_date',
+            'include_weekends' => 'nullable'
         ];
 
         $data = $request->validate($rule);
+        
+        $data['include_weekends'] = $request->include_weekends ? true : false;
 
         $event = $request->user()->events()->create($data);
 
@@ -75,10 +78,13 @@ class EventController extends Controller
             'description' => 'required',
             'type' => 'required',
             'start_date' => 'required|date_format:Y-m-d',
-            'end_date'  => 'nullable|date_format:Y-m-d|after_or_equal:start_date'
+            'end_date'  => 'nullable|date_format:Y-m-d|after_or_equal:start_date',
+            'include_weekends' => 'nullable'
         ];
 
         $data = $request->validate($rule);
+
+        $data['include_weekends'] = $request->include_weekends ? true : false;
 
         $event = Event::find($id);
         $event->update($data);

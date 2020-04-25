@@ -26,6 +26,8 @@ class CreateEventsTable extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date')->nullable();
 
+            $table->boolean('include_weekends')->default(false);
+
             $table->timestamps();
         });
     }

@@ -37,6 +37,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->authorize('create', User::class);
+
         $rules = [
             'username' => 'required|min:3|max:50|unique:users,username',
             'password' => 'required|min:4|max:20',
@@ -71,6 +74,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
+
         if($request->user()->is_administrator && $request->user()->id != $user->id){
 
             $rules = [

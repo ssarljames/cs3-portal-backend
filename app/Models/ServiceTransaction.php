@@ -11,9 +11,9 @@ class ServiceTransaction extends Model
     protected $fillable = [
         'station_id',
         'user_id',
-        'member_id',
         'sales',
         'time',
+        'customer_user_id',
 
         'remarks'
     ];
@@ -37,14 +37,14 @@ class ServiceTransaction extends Model
         return $this->hasMany(ServiceTransactionItem::class);
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'customer_user_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function member()
-    {
-        return $this->belongsTo(Member::class);
     }
 
     public function scopeStationId(Builder $q, $station_id){
