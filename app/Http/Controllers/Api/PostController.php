@@ -33,6 +33,8 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Post::class);
+
         $rule = [
             'title' => 'required|max:200',
             'content' => 'required'
@@ -65,6 +67,8 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('update', Post::class);
+
         $rule = [
             'title' => 'required|max:200',
             'content' => 'required'
@@ -87,6 +91,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('delete', Post::class);
+
+        
         DB::transaction(function () use ($id) {
           
             Post::destroy($id);

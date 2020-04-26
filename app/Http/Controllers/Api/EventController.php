@@ -35,12 +35,15 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->authorize('create', Event::class);
+
         $rule = [
             'name' => 'required|max:100',
             'description' => 'required',
             'type' => 'required',
             'start_date' => 'required|date_format:Y-m-d',
-            'end_date'  => 'nullable|date_format:Y-m-d|after_or_equal:start_date',
+            'end_date'  => 'nullable|date_format:Y-m-d|after:start_date',
             'include_weekends' => 'nullable'
         ];
 
@@ -73,6 +76,8 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('update', Event::class);
+
         $rule = [
             'name' => 'required|max:100',
             'description' => 'required',
@@ -89,6 +94,9 @@ class EventController extends Controller
         $event = Event::find($id);
         $event->update($data);
 
+
+        // $event->time_logs()->where('time', '>', $e)->delete();
+
         return new EventResource($event);
     }
 
@@ -100,10 +108,18 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('delete', Event::class);
+
         DB::beginTransaction();
 
         try{
-            Event::destroy($id);
+
+            $event = Event::find($id);
+
+            $event->time_logs()->delete();
+
+            $event->delete();
+
             DB::commit();
         }catch(Exception $e){
             DB::rollback();
