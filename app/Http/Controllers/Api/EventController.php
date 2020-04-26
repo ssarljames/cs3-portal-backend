@@ -76,7 +76,7 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->authorize('update', Event::class);
+        $this->authorize('update', Event::find($id));
 
         $rule = [
             'name' => 'required|max:100',
@@ -108,7 +108,7 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('delete', Event::class);
+        $this->authorize('delete', Event::find($id));
 
         DB::beginTransaction();
 

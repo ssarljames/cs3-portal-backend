@@ -67,7 +67,7 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->authorize('update', Post::class);
+        $this->authorize('update', Post::find($id));
 
         $rule = [
             'title' => 'required|max:200',
@@ -91,7 +91,7 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('delete', Post::class);
+        $this->authorize('delete', Post::find($id));
 
         
         DB::transaction(function () use ($id) {
