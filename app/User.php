@@ -29,7 +29,10 @@ class User extends Authenticatable
 
         'reset_password',
 
-        'deactivated_at'
+        'deactivated_at',
+
+        'userable_type',
+        'userable_id'
     ];
 
     protected $dates = ['created_at',  'updated_at'];
@@ -91,4 +94,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Student::class, 'created_by_user_id');
     }
+
+    public function userable()
+    {
+        return $this->morphTo();
+    }
+
 }

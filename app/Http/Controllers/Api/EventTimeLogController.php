@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\EventTimeLogResource;
 use App\Models\Event;
 use App\Models\EventTimeLog;
+use App\Models\Student;
+use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class EventTimeLogController extends Controller
@@ -40,22 +43,54 @@ class EventTimeLogController extends Controller
     public function store(Request $request, Event $event)
     {
         $rule = [
-            'user_id' => 'required|exists:users,id',
-            'time'    => 'date_format:Y-m-d h:i:s'
+            // 'user_id' => 'required|exists:users,id',
+            // 'time'    => 'date_format:Y-m-d h:i:s'
+            'code'  => 'required',
+            'type'  => 'required'
         ];
 
-        $data = $request->validate($rule);
 
-        $log = EventTimeLog::create([
-            'event_id' => $event->id,
-            'user_id'  => $data['user_id'],
-            'entry_by_user_id' => $request->user()->id,
-            'time'      => now(),
-            'type'      => 1,
-            'monitoring_group' => 1
-        ]);
+        $request->validate($rule);
 
-        return new EventTimeLogResource($log);
+        $code = $request->code;
+
+        $user = User::whereHasMorph('userable',
+                        [ Student::class ],
+                        function(Builder $q1) use ($code){
+                            $q1->where('id_number', $code);
+                        })
+                        ->select('id')
+                        ->first();
+
+        if($user){
+
+            $exist = EventTimeLog::where('event_id', $event->id)
+                                    ->where('user_id', $user->id)
+                                    ->where('type', $request->type)
+                                    ->count() > 0;
+
+            if($exist == false) {                                   
+                $log = EventTimeLog::create([
+                    'event_id' => $event->id,
+                    'user_id'  => $user->id,
+                    'entry_by_user_id' => $request->user()->id,
+                    'time'      => now(),
+                    'type'      => $request->type,
+                    'monitoring_group' => 1
+                ]);
+    
+                return new EventTimeLogResource($log);
+            }
+            else
+                return response()->json([
+                    'message' => 'Entry already exist'
+                ], 409);
+        
+        }
+
+        return response()->json([
+            'message' => 'User not found'
+        ], 404);
     }
 
     /**

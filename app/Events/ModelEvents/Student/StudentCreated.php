@@ -25,7 +25,9 @@ class StudentCreated
      */
     public function __construct(Student $student)
     {
-        
+        $student->user()->update([
+            'userable_id' => $student->id
+        ]);
     }
 
     /**

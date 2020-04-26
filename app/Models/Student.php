@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\ModelEvents\Student\StudentCreated;
 use App\Events\ModelEvents\Student\StudentCreating;
 use App\Events\ModelEvents\Student\StudentUpdated;
 use App\User;
@@ -19,6 +20,7 @@ class Student extends Model
 
     public $dispatchesEvents = [
         'creating' => StudentCreating::class,
+        'created' => StudentCreated::class,
         'updated' => StudentUpdated::class 
     ];
 

@@ -31,6 +31,8 @@ class StudentCreating
             'firstname' => $student->firstname,
             'lastname' => $student->lastname,
 
+            'userable_type' => Student::class,
+
             'reset_password' => true
         ]);
 
