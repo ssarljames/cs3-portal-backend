@@ -23,22 +23,25 @@ Route::namespace('Api')->group(function () {
     Route::post('login', 'AuthController@login')->name('login.api');
 
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::resource('users', 'UserController')->except('create');
-        Route::resource('stations', 'StationController')->except('create');
-        Route::resource('paper-sizes', 'PaperSizeController')->except('create');
-        Route::resource('print-qualities', 'PrintQualityController')->except('create');
-        Route::resource('service-rates', 'ServiceRateController')->except('create');
+        
+        Route::apiResource('users', 'UserController');
+        Route::apiResource('stations', 'StationController');
+        Route::apiResource('paper-sizes', 'PaperSizeController');
+        Route::apiResource('print-qualities', 'PrintQualityController');
+        Route::apiResource('service-rates', 'ServiceRateController');
 
-        Route::resource('service-transactions', 'ServiceTransactionController')->except('create');
+        Route::apiResource('service-transactions', 'ServiceTransactionController');
 
-        Route::resource('station-usage-logs', 'StationUsageLogController')->except('create');
+        Route::apiResource('station-usage-logs', 'StationUsageLogController');
 
-        Route::resource('posts', 'PostController')->except(['index', 'show','create']);
+        Route::apiResource('posts', 'PostController')->except(['index', 'show']);
 
 
-        Route::resource('events/{event}/event-time-logs', 'EventTimeLogController')->except(['create']);
+        Route::apiResource('events/{event}/event-time-logs', 'EventTimeLogController');
 
-        Route::resource('events', 'EventController')->except(['index', 'show','create']);
+        Route::apiResource('events', 'EventController')->except(['index', 'show']);
+
+        Route::apiResource('students', 'StudentController')->except(['index', 'show']);
 
 
 
@@ -46,8 +49,9 @@ Route::namespace('Api')->group(function () {
     });
 
 
-    Route::resource('posts', 'PostController')->only(['index', 'show']);
-    Route::resource('events', 'EventController')->only(['index', 'show']);
+    Route::apiResource('posts', 'PostController')->only(['index', 'show']);
+    Route::apiResource('events', 'EventController')->only(['index', 'show']);
+    Route::apiResource('students', 'StudentController')->only(['index', 'show']);
 
 
 });

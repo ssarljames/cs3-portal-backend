@@ -7,6 +7,7 @@ use App\Events\ModelEvents\User\UserUpdating;
 use App\Models\Event;
 use App\Models\Post;
 use App\Models\StationUsageLog;
+use App\Models\Student;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -84,5 +85,10 @@ class User extends Authenticatable
     public function events()
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function created_students()
+    {
+        return $this->hasMany(Student::class, 'created_by_user_id');
     }
 }

@@ -26,6 +26,10 @@ class CreateUsersTable extends Migration
             $table->dateTime('deactivated_at')->nullable();
 
             $table->softDeletes();
+
+            $table->string('userable_type')->nullable();
+            $table->unsignedBigInteger('userable_id')->nullable();
+
             $table->timestamps();
         });
     }
