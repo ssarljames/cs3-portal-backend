@@ -20,6 +20,14 @@ class PostController extends Controller
     {
         $query = Post::query();
 
+
+        if($request->has('meta_only'))
+            return [
+                'meta' => [
+                    'total' => $query->count()
+                ]
+            ];
+
         $posts = $query->paginate();
 
         return PostResource::collection($posts);

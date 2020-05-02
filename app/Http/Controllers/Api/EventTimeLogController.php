@@ -28,6 +28,7 @@ class EventTimeLogController extends Controller
 
         $query->orderBy('time', 'desc');
 
+
         $logs = $query->paginate(0);
 
         return EventTimeLogResource::collection($logs);

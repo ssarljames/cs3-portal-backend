@@ -14,6 +14,7 @@ class EventResource extends JsonResource
      */
     public function toArray($request)
     {
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -33,7 +34,9 @@ class EventResource extends JsonResource
                                                         ? date("Y-m-d")
                                                         : null)->get()
                                 )
-                            : []
+                            : [],
+
+            'attend_by_users' => $this->attend_by_users()->get()
 
         ];
     }

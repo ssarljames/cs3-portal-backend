@@ -31,4 +31,42 @@ class Event extends Model
     {
         return $this->hasMany(EventTimeLog::class);
     }
+
+
+    /**
+     * Return collection of App/User
+     */
+    public function attend_by_users()
+    {
+        return $this->belongsToMany(
+
+                        User::class, 
+                        'event_time_logs', 
+                        'event_id', 
+                        'user_id'
+
+                )->withPivot([
+                    'event_id',
+                    'user_id',
+                    'entry_by_user_id',
+                    'time',
+                    'type'
+                ]);
+    }
+
+
+    public function attend_by_students()
+    {
+        return $this->belongsToMany(
+                            Student::class,
+                            'attendances',
+                            'event_id', 
+                            'student_id')
+                    ->withPivot([
+                            'event_id',
+                            'student_id',
+                            'log_time',
+                            'log_type'
+                    ]);
+    }
 }

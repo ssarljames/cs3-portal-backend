@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +27,7 @@ class UserController extends Controller
                 ->orWhere('lastname', 'like', "%$request->q%");
             });
 
-        return $query->paginate();
+        return UserResource::collection($query->paginate());
     }
 
     /**
@@ -51,7 +52,7 @@ class UserController extends Controller
 
         $user = User::create($request->all());
 
-        return $user;
+        return new UserResource($user);
     }
 
     /**
@@ -62,7 +63,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return $user;
+        return new UserResource($user);
     }
 
     /**
@@ -145,7 +146,7 @@ class UserController extends Controller
 
 
 
-        return $user;
+        return new UserResource($user);
 
 
     }

@@ -66,7 +66,7 @@ class StationController extends Controller
             if(Hash::check($request->password, $request->user()->password) == false){
                 return response()->json([
                     'message' => 'Password is incorrect'
-                ], 401);
+                ], 422);
             }
 
             if($station->current_session == null){
@@ -86,7 +86,7 @@ class StationController extends Controller
             if(Hash::check($request->password, $request->user()->password) == false){
                 return response()->json([
                     'message' => 'Password is incorrect'
-                ], 401);
+                ], 422);
             }
 
             if($station->current_session && $station->current_session->user_id == $request->user()->id){

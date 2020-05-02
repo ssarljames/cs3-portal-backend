@@ -17,11 +17,19 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $query = Student::query();
 
-        $students = $query->paginate();
+
+        if($request->has('meta_only'))
+            return [
+                'meta' => [
+                    'total' => $query->count()
+                ]
+            ];
+
+        $students = $query->paginate(2);
 
         return StudentResource::collection($students);
     }

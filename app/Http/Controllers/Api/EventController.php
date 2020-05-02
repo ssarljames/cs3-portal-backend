@@ -22,6 +22,15 @@ class EventController extends Controller
 
         $query->orderBy('start_date', 'desc');
 
+        if($request->has('meta_only'))
+            return [
+                'meta' => [
+                    'total' => $query->count()
+                ]
+            ];
+
+
+
         $events = $query->paginate();
 
         return EventResource::collection($events);
