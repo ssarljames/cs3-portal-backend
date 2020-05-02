@@ -29,7 +29,7 @@ class StudentController extends Controller
                 ]
             ];
 
-        $students = $query->paginate(2);
+        $students = $query->paginate();
 
         return StudentResource::collection($students);
     }
