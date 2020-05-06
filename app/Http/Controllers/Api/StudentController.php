@@ -12,6 +12,11 @@ use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Student::class, 'student');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,6 +24,7 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
+
         $query = Student::query();
 
 
@@ -81,6 +87,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
+
         return new StudentResource($student);
     }
 
@@ -120,6 +127,6 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        
     }
 }

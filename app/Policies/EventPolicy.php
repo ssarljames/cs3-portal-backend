@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Event;
 use App\User;
+use App\UserPermission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class EventPolicy
@@ -18,7 +19,7 @@ class EventPolicy
      */
     public function viewAny(User $user)
     {
-        return true;
+        return $user->permissions()->permits(UserPermission::EVENTS, UserPermission::VIEWANY)->count() > 0;
     }
 
     /**
@@ -30,7 +31,7 @@ class EventPolicy
      */
     public function view(User $user, Event $event)
     {
-        return true;
+        return $user->permissions()->permits(UserPermission::EVENTS, UserPermission::VIEW)->count() > 0;
     }
 
     /**
@@ -41,7 +42,7 @@ class EventPolicy
      */
     public function create(User $user)
     {
-        return $user->is_administrator;
+        return $user->permissions()->permits(UserPermission::EVENTS, UserPermission::CREATE)->count() > 0;
     }
 
     /**
@@ -53,7 +54,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event)
     {
-        return $user->is_administrator;
+        return $user->permissions()->permits(UserPermission::EVENTS, UserPermission::UPDATE)->count() > 0;
     }
 
     /**
@@ -65,7 +66,7 @@ class EventPolicy
      */
     public function delete(User $user, Event $event)
     {
-        return $user->is_administrator;
+        return $user->permissions()->permits(UserPermission::EVENTS, UserPermission::DELETE)->count() > 0;
     }
 
     /**
@@ -77,7 +78,7 @@ class EventPolicy
      */
     public function restore(User $user, Event $event)
     {
-        //
+        return $user->permissions()->permits(UserPermission::EVENTS, UserPermission::RESTORE)->count() > 0;
     }
 
     /**
@@ -89,6 +90,6 @@ class EventPolicy
      */
     public function forceDelete(User $user, Event $event)
     {
-        //
+        return $user->permissions()->permits(UserPermission::EVENTS, UserPermission::FORCEDELETE)->count() > 0;
     }
 }

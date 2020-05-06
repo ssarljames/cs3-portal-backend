@@ -39,8 +39,6 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
-        $this->authorize('create', User::class);
-
         $rules = [
             'username' => 'required|min:3|max:50|unique:users,username',
             'password' => 'required|min:4|max:20',
@@ -75,7 +73,6 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $this->authorize('update', $user);
 
         if($request->user()->is_administrator && $request->user()->id != $user->id){
 
@@ -114,36 +111,6 @@ class UserController extends Controller
             ]);
 
         }
-        else{
-            $rules = [
-                'username' => [
-                    'required',
-                    'min:3',
-                    'max:20',
-                    Rule::unique('users')->ignore($user->id)
-                ],
-                'new_password' => 'nullable|min:5|max:20',
-                'confirm_new_password' => [
-                    'same:new_password'
-                ],
-                'password' => 'required'
-            ];
-
-            $request->validate($rules);
-
-            if($request->user()->checkPassword($request->password)){
-                $user->username = $request->username;
-                if($request->new_password)
-                    $user->password = bcrypt($request->new_password);
-
-                $user->save();
-            }
-            else
-                return response()->json([
-                    'message' => 'Authentication failed'
-                ], 401);
-        }
-
 
 
         return new UserResource($user);

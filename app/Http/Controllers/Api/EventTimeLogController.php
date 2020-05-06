@@ -68,6 +68,7 @@ class EventTimeLogController extends Controller
             $exist = EventTimeLog::where('event_id', $event->id)
                                     ->where('user_id', $user->id)
                                     ->where('type', $request->type)
+                                    ->whereDate('time', date("Y-m-d"))
                                     ->count() > 0;
 
             if($exist == false) {                                   

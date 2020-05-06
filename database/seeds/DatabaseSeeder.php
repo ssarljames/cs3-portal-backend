@@ -17,5 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ServiceRatesTableSeeder::class);
 
         $this->call(StationsTableSeeder::class);
+
+        $this->call(PermissionSeeder::class);
     }
 }

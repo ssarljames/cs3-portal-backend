@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -42,5 +43,9 @@ class AuthController extends Controller
             'message'=>'You have been succesfully logged out!'
         ], 200);
 
+    }
+
+    public function me(Request $request){
+        return new UserResource($request->user());
     }
 }

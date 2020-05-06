@@ -45,8 +45,6 @@ class EventController extends Controller
     public function store(Request $request)
     {
 
-        $this->authorize('create', Event::class);
-
         $rule = [
             'name' => 'required|max:100',
             'description' => 'required',
@@ -85,7 +83,6 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->authorize('update', Event::find($id));
 
         $rule = [
             'name' => 'required|max:100',
@@ -117,7 +114,6 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('delete', Event::find($id));
 
         DB::beginTransaction();
 

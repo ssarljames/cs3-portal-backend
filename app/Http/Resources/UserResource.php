@@ -16,8 +16,7 @@ class UserResource extends JsonResource
     {
         return [
             'id'    => $this->id,
-            'username' => $this->username,
-            'password' => $this->password,
+            'username' => $this->username, 
     
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
@@ -35,6 +34,8 @@ class UserResource extends JsonResource
             'is_administrator' => $this->is_administrator,
             'fullname' => $this->fullname,
             'role' => $this->role,
+
+            'permissions' =>  UserPermissionResource::collection($this->permissions)
         ];
     }
 }

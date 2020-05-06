@@ -23,8 +23,14 @@ Route::namespace('Api')->group(function () {
     Route::post('login', 'AuthController@login')->name('login.api');
 
     Route::group(['middleware' => 'auth:api'], function () {
+
+        Route::get('me', 'AuthController@me')->name('me');
         
         Route::apiResource('users', 'UserController');
+        Route::get('users/{user}/permissions/all', 'UserPermissionController@getAllPermissions');
+        Route::get('users/{user}/permissions/types', 'UserPermissionController@getTypes');
+        Route::apiResource('users/{user}/permissions', 'UserPermissionController');
+
         Route::apiResource('stations', 'StationController');
         Route::apiResource('paper-sizes', 'PaperSizeController');
         Route::apiResource('print-qualities', 'PrintQualityController');
@@ -41,17 +47,19 @@ Route::namespace('Api')->group(function () {
 
         Route::apiResource('events', 'EventController')->except(['index', 'show']);
 
-        Route::apiResource('students', 'StudentController')->except(['index', 'show']);
+        Route::apiResource('students', 'StudentController');
 
 
 
         // Route::post('logout', 'AuthController@logout');
+
+        Route::get('data-counts', 'AppController@data_counts');
+        Route::post('update-profile', 'AppController@update_profile')->name('update-profile');
     });
 
 
     Route::apiResource('posts', 'PostController')->only(['index', 'show']);
     Route::apiResource('events', 'EventController')->only(['index', 'show']);
-    Route::apiResource('students', 'StudentController')->only(['index', 'show']);
 
 
 });

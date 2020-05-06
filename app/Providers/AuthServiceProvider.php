@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Event;
 use App\Models\Post;
+use App\Models\Student;
 use App\Policies\EventPolicy;
 use App\Policies\PostPolicy;
+use App\Policies\StudentPolicy;
 use App\Policies\UserPolicy;
 use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -20,10 +22,10 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
         User::class => UserPolicy::class,
         Post::class => PostPolicy::class,
-        Event::class => EventPolicy::class
+        Event::class => EventPolicy::class,
+        Student::class => StudentPolicy::class
     ];
 
     /**

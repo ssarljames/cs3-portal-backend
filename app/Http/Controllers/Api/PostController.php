@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Post::class, 'post');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -41,7 +47,6 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Post::class);
 
         $rule = [
             'title' => 'required|max:200',
@@ -61,9 +66,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        return new PostResource(Post::find($id));
+        return new PostResource($post);
     }
 
     /**
@@ -73,9 +78,8 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        $this->authorize('update', Post::find($id));
 
         $rule = [
             'title' => 'required|max:200',
@@ -83,8 +87,6 @@ class PostController extends Controller
         ];
 
         $data = $request->validate($rule);
-
-        $post = Post::find($id);
 
         $post->update($data);
 
@@ -97,14 +99,13 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        $this->authorize('delete', Post::find($id));
 
         
-        DB::transaction(function () use ($id) {
+        DB::transaction(function () use ($post) {
           
-            Post::destroy($id);
+           $post->delete();
             
         });
 

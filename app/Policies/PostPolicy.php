@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Post;
 use App\User;
+use App\UserPermission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PostPolicy
@@ -16,9 +17,10 @@ class PostPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
-        return true;
+        return $user == null ||
+                    $user->permissions()->permits(UserPermission::POSTS, UserPermission::VIEWANY)->count() > 0;
     }
 
     /**
@@ -28,9 +30,9 @@ class PostPolicy
      * @param  \App\Models\Post  $post
      * @return mixed
      */
-    public function view(User $user, Post $post)
+    public function view(?User $user, Post $post)
     {
-        return true;
+        return $user == null || $user->permissions()->permits(UserPermission::POSTS, UserPermission::VIEW)->count() > 0;
     }
 
     /**
@@ -41,7 +43,7 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        return $user->is_administrator;
+        return $user->permissions()->permits(UserPermission::POSTS, UserPermission::CREATE)->count() > 0;
     }
 
     /**
@@ -53,7 +55,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->is_administrator;
+        return $user->permissions()->permits(UserPermission::POSTS, UserPermission::UPDATE)->count() > 0;
     }
 
     /**
@@ -65,7 +67,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return $user->is_administrator;
+        return $user->permissions()->permits(UserPermission::POSTS, UserPermission::DELETE)->count() > 0;
     }
 
     /**
@@ -77,7 +79,7 @@ class PostPolicy
      */
     public function restore(User $user, Post $post)
     {
-        //
+        return $user->permissions()->permits(UserPermission::POSTS, UserPermission::RESTORE)->count() > 0;
     }
 
     /**
@@ -89,6 +91,6 @@ class PostPolicy
      */
     public function forceDelete(User $user, Post $post)
     {
-        //
+        return $user->permissions()->permits(UserPermission::POSTS, UserPermission::FORCEDELETE)->count() > 0;
     }
 }
