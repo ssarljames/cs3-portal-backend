@@ -35,7 +35,9 @@ class UserResource extends JsonResource
             'fullname' => $this->fullname,
             'role' => $this->role,
 
-            'permissions' =>  UserPermissionResource::collection($this->permissions)
+            'permissions' =>  UserPermissionResource::collection($this->permissions),
+
+            'profile_image' => url('storage') . $this->profile_image
         ];
     }
 }

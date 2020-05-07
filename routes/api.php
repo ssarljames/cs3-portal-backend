@@ -55,6 +55,8 @@ Route::namespace('Api')->group(function () {
 
         Route::get('data-counts', 'AppController@data_counts');
         Route::post('update-profile', 'AppController@update_profile')->name('update-profile');
+
+        Route::post('upload-profile-picture', 'AppController@upload_profile_picture');
     });
 
 

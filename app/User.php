@@ -32,7 +32,8 @@ class User extends Authenticatable
         'deactivated_at',
 
         'userable_type',
-        'userable_id'
+        'userable_id',
+        'profile_image'
     ];
 
     protected $dates = ['created_at',  'updated_at'];

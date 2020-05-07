@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Post;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class AppController extends Controller
@@ -59,5 +60,32 @@ class AppController extends Controller
         
 
         return new UserResource($user);
+    }
+
+    public function upload_profile_picture(Request $request){
+        $rule = [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ];
+
+        $user = $request->user();
+
+        $request->validate($rule); 
+        
+        // Get image file
+        $image = $request->file('image');
+        $name = $user->id . '-' . date('Y-m-d-h:i:s');
+        $folder = '/uploads/images/profile/';
+        $filePath = $folder . $name. '.' . $image->getClientOriginalExtension();
+
+        $image->storeAs($folder, $name.'.'.$image->getClientOriginalExtension(), 'public');
+
+        $user->update([
+            'profile_image' => $filePath
+        ]);
+
+
+        return [
+            'data' => url('storage') . $filePath
+        ];
     }
 }
