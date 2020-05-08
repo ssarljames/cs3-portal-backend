@@ -63,6 +63,7 @@ class AppController extends Controller
     }
 
     public function upload_profile_picture(Request $request){
+
         $rule = [
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
@@ -73,19 +74,28 @@ class AppController extends Controller
         
         // Get image file
         $image = $request->file('image');
-        $name = $user->id . '-' . date('Y-m-d-h:i:s');
-        $folder = '/uploads/images/profile/';
+        $name = $user->id . date('Ymdhis');
+        $folder = 'images/profile-pictures/';
         $filePath = $folder . $name. '.' . $image->getClientOriginalExtension();
 
-        $image->storeAs($folder, $name.'.'.$image->getClientOriginalExtension(), 'public');
+
+
+        $image->storeAs($folder, $name.'.'.$image->getClientOriginalExtension());
+
+
+        $prevImage = $user->profile_image;
+        
 
         $user->update([
             'profile_image' => $filePath
         ]);
 
+        if(Storage::exists($prevImage))
+            Storage::delete($prevImage);
+
 
         return [
-            'data' => url('storage') . $filePath
+            'data' => Storage::url($filePath)
         ];
     }
 }

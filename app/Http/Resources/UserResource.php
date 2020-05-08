@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class UserResource extends JsonResource
 {
@@ -37,7 +38,7 @@ class UserResource extends JsonResource
 
             'permissions' =>  UserPermissionResource::collection($this->permissions),
 
-            'profile_image' => url('storage') . $this->profile_image
+            'profile_image' =>  Storage::url($this->profile_image)
         ];
     }
 }
