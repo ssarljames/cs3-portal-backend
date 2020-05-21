@@ -4,9 +4,9 @@ namespace App\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
-class EventTimeLog extends Model
+
+class EventTimeLog extends BaseModel
 {
     protected $fillable = [
         'event_id',

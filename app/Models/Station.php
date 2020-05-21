@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 
-class Station extends Model
+
+class Station extends BaseModel
 {
 
     protected $appends = [ 'current_session', 'previous_session', 'service_types', 'allowed_to_use' ];

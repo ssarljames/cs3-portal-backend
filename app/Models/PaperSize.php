@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 
-class PaperSize extends Model
+
+class PaperSize extends BaseModel
 {
     protected $fillable = [
         'description',

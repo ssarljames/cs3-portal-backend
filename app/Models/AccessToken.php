@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\User;
-use Illuminate\Database\Eloquent\Model;
 
-class AccessToken extends Model
+class AccessToken extends BaseModel
 {
     protected $table = 'oauth_access_tokens';
     protected $keyType = 'string';

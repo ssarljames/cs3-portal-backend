@@ -6,9 +6,9 @@ use App\Events\ModelEvents\StationUsageLog\StationUsageLogUpdating;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
-class StationUsageLog extends Model
+
+class StationUsageLog extends BaseModel
 {
 
     const MAX_TIME_OUT = '19:00:00';

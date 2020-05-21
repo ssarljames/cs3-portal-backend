@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Support\Facades\DB;
 
-class ServiceRate extends Model
+class ServiceRate extends BaseModel
 {
     protected $fillable = [
         'type',

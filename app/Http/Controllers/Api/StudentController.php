@@ -27,15 +27,9 @@ class StudentController extends Controller
 
         $query = Student::query();
 
+        $query->search($request->q);
 
-        if($request->has('meta_only'))
-            return [
-                'meta' => [
-                    'total' => $query->count()
-                ]
-            ];
-
-        $students = $query->paginate();
+        $students = $query->paginate($request->per_page);
 
         return StudentResource::collection($students);
     }

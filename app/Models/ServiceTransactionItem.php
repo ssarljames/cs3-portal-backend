@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 
-class ServiceTransactionItem extends Model
+
+class ServiceTransactionItem extends BaseModel
 {
     protected $fillable = [
         'service_transaction_id',

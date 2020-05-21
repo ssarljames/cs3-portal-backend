@@ -4,9 +4,9 @@ namespace App\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
-class ServiceTransaction extends Model
+
+class ServiceTransaction extends BaseModel
 {
     protected $fillable = [
         'station_id',
