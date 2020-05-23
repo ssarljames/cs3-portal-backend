@@ -38,7 +38,9 @@ class UserResource extends JsonResource
 
             'permissions' =>  UserPermissionResource::collection($this->permissions),
 
-            'profile_image' =>  Storage::url($this->profile_image)
+            'profile_image' =>  $this->profile_image 
+                                        ? Storage::url($this->profile_image)
+                                        : null
         ];
     }
 }

@@ -42,11 +42,11 @@ class ServiceRateController extends Controller
             'rate'              => 'required|numeric|max:99'
         ];
 
-        $request->validate($rule);
+        $data = $request->validate($rule);
 
-        $pr = ServiceRate::create($request->all());
+        $sr = ServiceRate::create( $data );
 
-        return $pr;
+        return $sr;
     }
 
     /**

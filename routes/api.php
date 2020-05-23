@@ -49,6 +49,8 @@ Route::namespace('Api')->group(function () {
 
         Route::apiResource('students', 'StudentController');
 
+        Route::apiResource('programs', 'ProgramController');
+
 
 
         // Route::post('logout', 'AuthController@logout');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\Event;
 use App\Models\Post;
+use App\Models\Program;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +20,8 @@ class AppController extends Controller
                 'students' => Student::count(),
                 'posts' => Post::count(),
                 'events' => Event::count(),
-                'semester' => '2<sup>nd</sup> Sem 2019-2020'
+                'semester' => '2<sup>nd</sup> Sem 2019-2020',
+                'programs' => Program::count()
             ]
         ];
     }

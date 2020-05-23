@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Student\StudentCreateRequest;
+use App\Http\Requests\Student\StudentUpdateRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use Exception;
@@ -40,17 +42,9 @@ class StudentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StudentCreateRequest $request)
     {
-
-        $rule = [
-            'id_number' => 'required|max:50|unique:students,id_number', 
-            'firstname' => 'required|max:100',
-            'lastname' => 'required|max:100',
-            'middlename' => 'nullable|max:100',
-        ];
-
-        $data = $request->validate($rule);
+        $data = $request->validated();
 
 
         try{
@@ -92,21 +86,10 @@ class StudentController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Student $student)
+    public function update(StudentUpdateRequest $request, Student $student)
     {
 
-        $rule = [
-            'id_number' => [
-                'required',
-                'max:50',
-                Rule::unique('students','id_number')->ignore($student->id)
-            ], 
-            'firstname' => 'required|max:100',
-            'lastname' => 'required|max:100',
-            'middlename' => 'nullable|max:100',
-        ];
-
-        $data = $request->validate($rule);
+        $data = $request->validated();
 
         $student->update($data);
 

@@ -16,7 +16,11 @@ class Student extends BaseModel
         'firstname',
         'lastname',
         'middlename',
-        'user_id'
+        'user_id',
+        'program_id',
+        'year_level',
+        'current_address',
+        'home_address'
     ];
 
     public $dispatchesEvents = [
@@ -37,7 +41,7 @@ class Student extends BaseModel
     }
 
     public function scopeSearch(Builder $query, $q){
-        $q = $this->trimStringParamater($q);
+        $q = $this->trimParamater($q);
 
         if(!$q)
             return $query;
@@ -47,5 +51,10 @@ class Student extends BaseModel
             $query->whereRaw("LOWER(firstname) LIKE '$q%'")
                     ->orWhereRaw("LOWER(lastname) LIKE '$q%'");
         });
+    }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
     }
 }

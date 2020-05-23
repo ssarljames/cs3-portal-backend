@@ -32,7 +32,14 @@ class StudentResource extends JsonResource
                                     ? $this->created_by_user
                                     : null,
 
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at,
+
+            'program_id' => $this->program_id,
+            'year_level' => $this->year_level,
+            'current_address' => $this->current_address,
+            'home_address' => $this->home_address,
+
+            'program' => $this->program
         ];
     }
 }

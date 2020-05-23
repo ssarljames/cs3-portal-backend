@@ -14,12 +14,13 @@ class BaseModel extends Model
     //             : 'LIKE';
     // }
 
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->isPostgres = env('DB_CONNECTION') == 'pgsql';
     }
 
-    public function trimStringParamater($str){
+    public function trimParamater($str){
         return str_replace("'", '', strtolower(trim($str)));
     }
 }
