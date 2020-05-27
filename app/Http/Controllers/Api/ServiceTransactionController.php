@@ -25,7 +25,7 @@ class ServiceTransactionController extends Controller
         $query->with('customer')
             ->orderBy('time', 'desc');
 
-        return $query->paginate($request->page_size ? $request->page_size : $this->defaultPageSize);
+        return $query->paginate($this->page_size);
     }
 
     /**

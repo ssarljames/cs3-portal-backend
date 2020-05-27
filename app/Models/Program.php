@@ -9,7 +9,9 @@ class Program extends BaseModel
 {
     protected $fillable = [
         'name',
-        'code'
+        'code',
+        'department_id',
+        'no_of_years'
     ];
 
 
@@ -21,7 +23,7 @@ class Program extends BaseModel
 
         return $query->where(function($query) use ($q){
             $query->where(DB::raw('LOWER(name)'), 'LIKE', "%$q%")
-                    ->orWhere(DB::raw('LOWER(code)', 'LIKE', "%$q%"));
+                    ->orWhere(DB::raw('LOWER(code)'), 'LIKE', "%$q%");
         });
 
     }

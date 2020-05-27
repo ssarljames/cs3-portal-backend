@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Program;
+namespace App\Http\Requests\Department;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ProgramUpdateRequest extends FormRequest
+class DepartmentUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,16 +26,15 @@ class ProgramUpdateRequest extends FormRequest
     {
         return [
             'name' => [
-                'required',
-                'max:50',
-                Rule::unique('programs', 'name')->ignore( $this->route('program') )
+                        'required',
+                        'max:100',
+                        Rule::unique('departments', 'name')->ignore( $this->route('department') )
             ],
             'code' => [
-                'required',
-                'max:10',
-                Rule::unique('programs', 'name')->ignore( $this->route('program') )
-            ],
-            'no_of_years' => 'required|max:6|min:1'
+                        'required',
+                        'max:10',
+                        Rule::unique('departments', 'code')->ignore( $this->route('department') )
+            ]
         ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Student;
 
+use App\Rules\ValidNameRule;
+use App\Rules\ValidStudentYearLevelRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -30,11 +32,28 @@ class StudentUpdateRequest extends FormRequest
                 'max:50',
                 Rule::unique('students','id_number')->ignore($this->route('student'))
             ], 
-            'firstname' => 'required|max:100',
-            'lastname' => 'required|max:100',
-            'middlename' => 'nullable|max:100',
+            'firstname' => [
+                            'required',
+                            'max:50',
+                            new ValidNameRule()
+            ],
+            'lastname' => [
+                            'required',
+                            'max:50',
+                            new ValidNameRule()
+            ],
+            'middlename' => [
+                            'nullable',
+                            'max:50',
+                            new ValidNameRule()
+            ],
             'program_id' => 'required|exists:programs,id',
-            'year_level' => 'required|numeric|min:1|max:6',
+            'year_level' =>  [
+                'required',
+                'numeric',
+                'min:1',
+                new ValidStudentYearLevelRule($this->request->get('program_id'))
+            ],
             'current_address' => 'nullable',
             'home_address' => 'nullable'
         ];

@@ -29,7 +29,7 @@ class StationUsageLogController extends Controller
             $query->orderBy($request->sortBy, $request->has('sortOrder') ?  $request->sortOrder : 'asc' );
 
 
-        $logs = $query->paginate($request->page_size ? $request->page_size : $this->defaultPageSize);
+        $logs = $query->paginate($this->page_size);
 
         foreach ($logs as $log) {
             $log->validate();

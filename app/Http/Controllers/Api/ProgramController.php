@@ -35,11 +35,9 @@ class ProgramController extends Controller
      */
     public function store(ProgramCreateRequest $request)
     {
-        $program = Program::create(
-            $request->only([
-                'name', 'code'
-            ])
-        );
+        $data = $request->validated();
+
+        $program = Program::create($data);
 
         return new ProgramResource($program);
     }
@@ -65,11 +63,8 @@ class ProgramController extends Controller
      */
     public function update(ProgramUpdateRequest $request, Program $program)
     {
-        $program->update(
-            $request->only([
-                'name', 'code'
-            ])
-        );
+        $data = $request->validated();
+        $program->update($data);
 
         return new ProgramResource($program);
     }
