@@ -20,7 +20,9 @@ class Controller extends BaseController
     {
         $this->page_size = $request->has('page_size')
                                 ? $request->page_size
-                                : $this->defaultPageSize;
+                                :  ($request->has('per_page')
+                                    ? $request->per_page
+                                    : $this->defaultPageSize);
     }
 
 }

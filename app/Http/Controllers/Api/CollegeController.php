@@ -20,7 +20,9 @@ class CollegeController extends Controller
     {
         $query = College::query();
 
-        $colleges = $query->paginate($this->per_page);
+        $query->search( $request->q );
+
+        $colleges = $query->paginate($this->page_size);
 
         return CollegeResource::collection($colleges);
     }

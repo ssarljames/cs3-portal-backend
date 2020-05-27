@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Student;
 
-use App\Rules\ValidNameRule;
-use App\Rules\ValidStudentYearLevelRule;
+use App\Rules\NameRule;
+use App\Rules\StudentIdPatternRule;
+use App\Rules\StudentYearLevelRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StudentCreateRequest extends FormRequest
@@ -26,28 +27,33 @@ class StudentCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_number' => 'required|max:50|unique:students,id_number', 
+            'id_number' => [
+                'required',
+                'max:50',
+                'unique:students,id_number',
+                new StudentIdPatternRule()
+            ], 
             'firstname' => [
                             'required',
                             'max:50',
-                            new ValidNameRule()
+                            new NameRule()
             ],
             'lastname' => [
                             'required',
                             'max:50',
-                            new ValidNameRule()
+                            new NameRule()
             ],
             'middlename' => [
                             'nullable',
                             'max:50',
-                            new ValidNameRule()
+                            new NameRule()
             ],
             'program_id' => 'required|exists:programs,id',
             'year_level' =>  [
                 'required',
                 'numeric',
                 'min:1',
-                new ValidStudentYearLevelRule($this->request->get('program_id'))
+                new StudentYearLevelRule( $this->request->get('program_id') )
             ],
             'current_address' => 'nullable',
             'home_address' => 'nullable'

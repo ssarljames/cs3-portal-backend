@@ -2,20 +2,18 @@
 
 namespace App\Rules;
 
-use App\Models\Program;
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidStudentYearLevelRule implements Rule
+class NameRule implements Rule
 {
-    private $program = null;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($program_id)
+    public function __construct()
     {
-        $this->program = Program::find($program_id);
+        //
     }
 
     /**
@@ -27,10 +25,9 @@ class ValidStudentYearLevelRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        return $this->program != null 
-                    && $value >= 1 
-                    && $value <= $this->program->no_of_years;
-        
+        $pattern = "/^[a-zA-ZÑñ]+(([', -][a-zA-ZÑñ ])?[a-zA-ZÑñ]*)*$/";
+
+        return preg_match($pattern,  trim($value));
     }
 
     /**
@@ -40,8 +37,6 @@ class ValidStudentYearLevelRule implements Rule
      */
     public function message()
     {
-        return $this->program
-                    ? "Invalid year level for {$this->program->code}"
-                    : 'Program enrolled in is require.';
+        return 'Not a valid name.';
     }
 }

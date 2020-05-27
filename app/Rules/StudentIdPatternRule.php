@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidNameRule implements Rule
+class StudentIdPatternRule implements Rule
 {
     /**
      * Create a new rule instance.
@@ -25,7 +25,7 @@ class ValidNameRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        $pattern = "/^[a-zA-ZÑñ]+(([', -][a-zA-ZÑñ ])?[a-zA-ZÑñ]*)*$/";
+        $pattern = "/^(\d{2})-(\d)-(\d{5})$/";
 
         return preg_match($pattern,  trim($value));
     }
@@ -37,6 +37,6 @@ class ValidNameRule implements Rule
      */
     public function message()
     {
-        return 'Not a valid name.';
+        return 'Invalid ID, must follow ##-#-##### pattern';
     }
 }
